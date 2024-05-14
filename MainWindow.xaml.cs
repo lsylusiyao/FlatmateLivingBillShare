@@ -61,7 +61,24 @@ namespace FlatmateLivingBillShare
 
         private void Button_Click(object sender, RoutedEventArgs e) // Submit button
         {
-            // TODO protect of mischoice
+            if (priceTextBox.Text.Length == 0)
+            {
+                MessageBox.Show("Enter the price before submit.", "Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (payerComboBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("Choose the payer before submit.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (!NameChecks.Where(x => x.Check).Select(x => x.Name).Any())
+            {
+                MessageBox.Show("Choose the shared people before submit.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             Bills.Add(new Bill()
             {
                 Item = itemTextBox.Text,
@@ -71,6 +88,7 @@ namespace FlatmateLivingBillShare
             });
             itemTextBox.Text = string.Empty;
             priceTextBox.Text = string.Empty;
+            // keep the choice of payer for convenience
             NameChecks.Clear();
             foreach (var n in Names) NameChecks.Add(new NameCheck(n, false));
         }
@@ -89,6 +107,18 @@ namespace FlatmateLivingBillShare
                 }
             }
             MessageBox.Show("Calculate Finish!");
+            var sb = new StringBuilder();
+            foreach (var n in Names)
+            {
+                sb.AppendLine($"{n} costs: {billCalc.EachMateCost[n]:F2}.");
+            }
+            MessageBox.Show(sb.ToString());
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e) //export
+        {
+            billCalc.Export();
+            MessageBox.Show("Export finish.");
         }
     }
 }

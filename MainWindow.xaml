@@ -54,7 +54,7 @@
                 </StackPanel>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Stretch">
-                <Label Content="Bill results" FontSize="30" FontWeight="Bold"/>
+                <Label Content="Share bill results" FontSize="30" FontWeight="Bold"/>
                 <DataGrid x:Name="resultGrid" FontSize="20" ItemsSource="{Binding Result}" IsReadOnly="True" AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="From" MinWidth="110" Binding="{Binding From}"/>
@@ -70,7 +70,7 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Content=" Calculate " FontSize="20" Height="50" HorizontalAlignment="Stretch" Click="Button_Click_1"/>
-                <Button Grid.Column="2" Content=" Export to CSV " FontSize="20" Height="50" HorizontalAlignment="Stretch"/>
+                <Button Grid.Column="2" Content=" Export to CSV " FontSize="20" Height="50" HorizontalAlignment="Stretch" Click="Button_Click_2"/>
             </Grid>
         </Grid>
         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Stretch">
