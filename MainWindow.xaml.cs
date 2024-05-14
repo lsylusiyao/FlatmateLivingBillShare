@@ -32,6 +32,10 @@ namespace FlatmateLivingBillShare
 
         public ObservableCollection<Bill> Bills { set; get; } = new();
 
+        private BillCalculation billCalc;
+
+        public ObservableCollection<BillResult> Result { set; get; } = new();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +45,7 @@ namespace FlatmateLivingBillShare
             ArgumentNullException.ThrowIfNull(Names);
             NameChecks = new();
             foreach (var n in Names) NameChecks.Add(new NameCheck(n, false));
+            billCalc = new(Names);
         }
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -54,8 +59,9 @@ namespace FlatmateLivingBillShare
                 Bills.RemoveAt(billsGrid.SelectedIndex);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e) // Submit button
         {
+            // TODO protect of mischoice
             Bills.Add(new Bill()
             {
                 Item = itemTextBox.Text,
@@ -63,11 +69,26 @@ namespace FlatmateLivingBillShare
                 SharedPeople = NameChecks.Where(x => x.Check).Select(x => x.Name).ToArray(),
                 Payer = payerComboBox.Text
             });
+            itemTextBox.Text = string.Empty;
+            priceTextBox.Text = string.Empty;
+            NameChecks.Clear();
+            foreach (var n in Names) NameChecks.Add(new NameCheck(n, false));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e) // Calculate
         {
-
+            Result.Clear();
+            billCalc.Bills = Bills;
+            var resultDict = billCalc.Calculate();
+            foreach (var a in resultDict)
+            {
+                foreach (var b in a.Value)
+                {
+                    if (b.Value >= 0) Result.Add(new(b.Key, a.Key, b.Value));
+                    else Result.Add(new(a.Key, b.Key, -b.Value));
+                }
+            }
+            MessageBox.Show("Calculate Finish!");
         }
     }
 }

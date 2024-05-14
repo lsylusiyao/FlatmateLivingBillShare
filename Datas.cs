@@ -24,4 +24,18 @@ namespace FlatmateLivingBillShare
         public string Name { set; get; }
         public bool Check { set; get; }
     }
+
+    public class BillResult
+    {
+        public BillResult(string from, string to, float amount)
+        {
+            From = from;
+            To = to;
+            Amount = amount;
+        }
+
+        public string From { set; get; }
+        public string To { set; get; }
+        public float Amount { set; get; }
+    }
 }

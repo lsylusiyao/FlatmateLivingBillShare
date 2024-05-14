@@ -55,11 +55,11 @@
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Stretch">
                 <Label Content="Bill results" FontSize="30" FontWeight="Bold"/>
-                <DataGrid x:Name="resultGrid" FontSize="20">
+                <DataGrid x:Name="resultGrid" FontSize="20" ItemsSource="{Binding Result}" IsReadOnly="True" AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="From" MinWidth="110"/>
-                        <DataGridTextColumn Header="To" MinWidth="110"/>
-                        <DataGridTextColumn Header="Should pay" MinWidth="120"/>
+                        <DataGridTextColumn Header="From" MinWidth="110" Binding="{Binding From}"/>
+                        <DataGridTextColumn Header="To" MinWidth="110"  Binding="{Binding To}"/>
+                        <DataGridTextColumn Header="Should pay" MinWidth="120"  Binding="{Binding Amount, StringFormat={}{0:F2}}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -75,7 +75,7 @@
         </Grid>
         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Stretch">
             <Label Content="Submitted bills" FontSize="30" FontWeight="Bold"/>
-            <DataGrid x:Name="billsGrid" FontSize="20" ItemsSource="{Binding Bills, Mode=OneWay}" AutoGenerateColumns="False">
+            <DataGrid x:Name="billsGrid" FontSize="20" ItemsSource="{Binding Bills, Mode=OneWay}" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.ContextMenu>
                     <StaticResource ResourceKey="DataGridContextMenu"/>
                 </DataGrid.ContextMenu>
