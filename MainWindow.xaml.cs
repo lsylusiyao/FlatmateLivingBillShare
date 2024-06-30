@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SimpleExpressionEvaluator;
 
 namespace FlatmateLivingBillShare
 {
@@ -36,6 +38,8 @@ namespace FlatmateLivingBillShare
 
         public ObservableCollection<BillResult> Result { set; get; } = new();
 
+        private ExpressionEvaluator engine = new(CultureInfo.CurrentCulture);
+
         public MainWindow()
         {
             InitializeComponent();
@@ -50,7 +54,7 @@ namespace FlatmateLivingBillShare
 
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !Regex.IsMatch(e.Text, "[0-9.eE_,]");
+            e.Handled = !NumberRegex().IsMatch(e.Text);
         }
 
         private void DeleteMenuItem_Click(object sender, RoutedEventArgs e)
@@ -79,10 +83,20 @@ namespace FlatmateLivingBillShare
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            decimal result;
+            try
+            {
+                result = engine.Evaluate(priceTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Something wrong in the price. Check the expression first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             Bills.Add(new Bill()
             {
                 Item = itemTextBox.Text,
-                Price = float.Parse(priceTextBox.Text),
+                Price = Convert.ToSingle(result),
                 SharedPeople = NameChecks.Where(x => x.Check).Select(x => x.Name).ToArray(),
                 Payer = payerComboBox.Text
             });
@@ -120,5 +134,8 @@ namespace FlatmateLivingBillShare
             billCalc.Export();
             MessageBox.Show("Export finish.");
         }
+
+        [GeneratedRegex("[0-9-.,+*/()]")]
+        private static partial Regex NumberRegex();
     }
 }

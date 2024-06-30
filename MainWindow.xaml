@@ -27,31 +27,39 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" VerticalAlignment="Top" Margin="0,10,0,0">
-                <StackPanel Orientation="Horizontal" Margin="20,0,0,0" VerticalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center">
-                        <Label Content="Item" FontSize="20" HorizontalContentAlignment="Center"/>
-                        <TextBox x:Name="itemTextBox" Width="120" FontSize="20"/>
+                <Grid Margin="10,0,15,0" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="55"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <Label Content="Item" FontSize="20" HorizontalContentAlignment="Center"/>
+                            <TextBox x:Name="itemTextBox" FontSize="20" HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <Label Content="Price" FontSize="20" HorizontalContentAlignment="Center"/>
+                            <TextBox x:Name="priceTextBox" FontSize="20" PreviewTextInput="TextBox_PreviewTextInput" InputMethod.IsInputMethodEnabled="False"/>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Margin="15,0,0,0">
-                        <Label Content="Price" FontSize="20" HorizontalContentAlignment="Center"/>
-                        <TextBox x:Name="priceTextBox" Width="100" FontSize="20" PreviewTextInput="TextBox_PreviewTextInput"/>
-                    </StackPanel>
-                    <StackPanel Margin="20,0,0,0">
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
                         <Label Content="Payer" FontSize="20" HorizontalContentAlignment="Center"/>
                         <ComboBox x:Name="payerComboBox" FontSize="20" MinWidth="120" ItemsSource="{Binding Names}"/>
                     </StackPanel>
-                    <StackPanel Margin="10,0,0,0">
-                        <Label Content="Shared by" FontSize="20"/>
+                    <StackPanel Grid.Column="2" Margin="20,0,0,0">
+                        <Label Content="Shared by" FontSize="20" HorizontalAlignment="Left"/>
                         <ItemsControl ItemsSource="{Binding NameChecks}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Check}" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
+                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Check}" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="5"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    <Button Width="40" Content="➡️" Height="45" Margin="10,0,0,0" Click="Button_Click"/>
-                </StackPanel>
+                    <Button Grid.Column="4" Width="40" Content="➡️" Height="45" Margin="5,0,5,0" Click="Button_Click"/>
+                </Grid>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Stretch">
                 <Label Content="Share bill results" FontSize="30" FontWeight="Bold"/>
@@ -70,12 +78,16 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Content=" Calculate " FontSize="20" Height="50" HorizontalAlignment="Stretch" Click="Button_Click_1"/>
-                <Button Grid.Column="2" Content=" Export to CSV " FontSize="20" Height="50" HorizontalAlignment="Stretch" Click="Button_Click_2"/>
+                <Button Grid.Column="2" Content=" Export to XLSX " FontSize="20" Height="50" HorizontalAlignment="Stretch" Click="Button_Click_2"/>
             </Grid>
         </Grid>
-        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Stretch">
-            <Label Content="Submitted bills" FontSize="30" FontWeight="Bold"/>
-            <DataGrid x:Name="billsGrid" FontSize="20" ItemsSource="{Binding Bills, Mode=OneWay}" AutoGenerateColumns="False" IsReadOnly="True">
+        <Grid Grid.Column="1" Margin="5,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Submitted bills" FontSize="30" FontWeight="Bold"/>
+            <DataGrid Grid.Row="1" x:Name="billsGrid" FontSize="20" ItemsSource="{Binding Bills, Mode=OneWay}" AutoGenerateColumns="False" IsReadOnly="True">
                 <DataGrid.ContextMenu>
                     <StaticResource ResourceKey="DataGridContextMenu"/>
                 </DataGrid.ContextMenu>
@@ -86,6 +98,6 @@
                     <DataGridTextColumn Header="Item" MinWidth="250" Binding="{Binding Item}"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Window>
